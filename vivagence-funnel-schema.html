@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vivagence — Schéma Funnel de Vente Complet</title>
+<style>
+  :root {
+    --bg: #F5F3EE;
+    --card: #FFFFFF;
+    --border: #E0DDD6;
+    --text: #1A1A1A;
+    --muted: #6B6B6B;
+    --or: #C8973A;
+    --or-pale: #F9F0DC;
+
+    --p0: #3D3D3D;
+    --p1: #1A3B6B;
+    --p2: #2A6B3A;
+    --p3: #5B2D8E;
+    --p4: #B05A00;
+    --p5: #8B1A1A;
+    --p6: #0A6B5E;
+    --yes: #2A6B3A;
+    --no:  #8B1A1A;
+    --maybe: #B05A00;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── HEADER ── */
+  .hdr {
+    background: #1A1A1A;
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 3px solid var(--or);
+  }
+  .hdr-logo { font-size: 22px; font-weight: 800; color: var(--or); letter-spacing: 3px; }
+  .hdr-sub  { font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 1px; margin-top: 2px; }
+  .hdr-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 5px 14px; border: 1px solid #8B1A1A; color: #F5AAAA; border-radius: 2px;
+  }
+
+  /* ── SECTOR SELECTOR ── */
+  .sector-bar {
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 28px;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+  }
+  .sector-bar .lbl { font-size: 11px; font-weight: 700; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-right: 8px; flex-shrink:0; }
+  .sec-btn {
+    font-size: 11px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1.5px solid var(--border);
+    background: var(--bg); color: var(--muted);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+  .sec-btn:hover { border-color: var(--or); color: var(--or); }
+  .sec-btn.active { background: var(--or); color: #1A1A1A; border-color: var(--or); }
+
+  /* ── MAIN LAYOUT ── */
+  .main { display: flex; height: calc(100vh - 106px); overflow: hidden; }
+
+  /* ── LEFT PHASE NAV ── */
+  .phase-nav {
+    width: 200px; flex-shrink:0;
+    background: #1A1A1A;
+    overflow-y: auto;
+    padding: 12px 0;
+  }
+  .phase-nav-item {
+    padding: 12px 20px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .phase-nav-item:hover { background: rgba(255,255,255,0.06); }
+  .phase-nav-item.active { background: rgba(255,255,255,0.1); border-left-color: var(--or); }
+  .phase-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: white; flex-shrink: 0;
+  }
+  .phase-nav-label { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.7); letter-spacing: 0.5px; line-height: 1.3; }
+  .phase-nav-item.active .phase-nav-label { color: white; }
+  .phase-connector { width: 1px; height: 16px; background: rgba(255,255,255,0.15); margin: 0 0 0 33px; }
+
+  /* ── FUNNEL OVERVIEW ── */
+  .funnel-overview {
+    width: 220px; flex-shrink:0;
+    background: #F0EDE6;
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 16px 12px;
+  }
+  .funnel-overview-title { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; padding-left: 4px; }
+  .f-level {
+    margin-bottom: 3px;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .f-level:hover { transform: translateX(2px); }
+  .f-bar {
+    border-radius: 2px;
+    padding: 8px 10px;
+    font-size: 11px; font-weight: 700; color: white;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .f-bar .f-num { font-size: 15px; font-weight: 900; }
+  .f-bar .f-lbl { font-size: 10px; letter-spacing: 0.5px; }
+  .f-pct { font-size: 10px; color: var(--muted); padding: 2px 10px 6px; }
+  .f-arrow { text-align: center; font-size: 11px; color: var(--border); line-height: 1; margin: 1px 0; }
+
+  .conv-funnel { margin-top: 20px; }
+  .conv-title { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; padding-left: 4px; }
+  .conv-item { display: flex; align-items: center; gap: 6px; padding: 4px 4px; margin-bottom: 3px; }
+  .conv-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink:0; }
+  .conv-label { font-size: 11px; color: var(--muted); }
+  .conv-val { font-size: 12px; font-weight: 700; margin-left: auto; }
+
+  /* ── CONTENT AREA ── */
+  .content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 24px;
+  }
+
+  /* ── PHASE CONTENT ── */
+  .phase-content { display: none; }
+  .phase-content.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── PHASE HEADER ── */
+  .ph-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .ph-num {
+    width: 52px; height: 52px;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 900; color: white; flex-shrink: 0;
+  }
+  .ph-title { font-size: 20px; font-weight: 800; }
+  .ph-sub { font-size: 12px; color: var(--muted); margin-top: 2px; font-style: italic; }
+  .ph-timing {
+    margin-left: auto;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ── BLOCKS ── */
+  .block { margin-bottom: 14px; }
+  .block-title {
+    font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .card-label {
+    font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .card p { color: var(--text); line-height: 1.6; }
+  .card .italic { font-style: italic; color: #444; }
+
+  /* ── SCRIPT BOX ── */
+  .script-box {
+    border-radius: 4px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+    border-left: 4px solid;
+  }
+  .script-box .quote-mark { font-size: 32px; line-height: 0.8; margin-bottom: 6px; opacity: 0.5; }
+  .script-box p { font-style: italic; line-height: 1.65; font-size: 13px; }
+  .script-box .label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+
+  /* ── 3-OUI GRID ── */
+  .oui-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .oui-card {
+    border-radius: 4px;
+    padding: 12px 14px;
+    text-align: center;
+  }
+  .oui-card .oui-n { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.8; margin-bottom: 4px; }
+  .oui-card .oui-t { font-size: 12px; font-style: italic; line-height: 1.4; }
+
+  /* ── BRANCH SCENARIOS ── */
+  .branch-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .branch {
+    border-radius: 4px;
+    padding: 12px 14px;
+    border: 1.5px solid;
+  }
+  .branch .b-tag { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; display: flex; align-items: center; gap: 5px; }
+  .branch .b-trigger { font-size: 12px; font-style: italic; color: var(--muted); margin-bottom: 8px; line-height: 1.4; }
+  .branch .b-action { font-size: 12px; line-height: 1.5; }
+  .branch .b-next { font-size: 10px; font-weight: 700; margin-top: 8px; padding: 4px 8px; border-radius: 2px; display: inline-block; }
+
+  /* ── CAP BLOCK ── */
+  .cap-block { margin-bottom: 12px; border-radius: 4px; overflow: hidden; border: 1px solid var(--border); }
+  .cap-row { display: grid; grid-template-columns: 120px 1fr; }
+  .cap-row + .cap-row { border-top: 1px solid var(--border); }
+  .cap-label { padding: 10px 12px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: white; display: flex; align-items: center; }
+  .cap-val { padding: 10px 14px; font-size: 13px; line-height: 1.5; }
+
+  /* ── OBJECTIONS TABLE ── */
+  .obj-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+  .obj-table th { padding: 9px 14px; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: white; text-align: left; }
+  .obj-table td { padding: 10px 14px; font-size: 12px; line-height: 1.5; vertical-align: top; border-top: 1px solid var(--border); }
+  .obj-table tr:nth-child(even) td { background: #FAFAF8; }
+  .obj-trigger { font-style: italic; color: var(--p5); }
+  .crac-step { display: inline-block; font-size: 9px; font-weight: 800; letter-spacing: 1px; padding: 1px 5px; border-radius: 2px; margin-right: 3px; margin-bottom: 2px; color: white; }
+
+  /* ── NEXT STEPS ── */
+  .nextstep-list { list-style: none; }
+  .nextstep-list li {
+    padding: 8px 12px;
+    border-left: 3px solid var(--p6);
+    background: #F0FDF6;
+    margin-bottom: 5px;
+    border-radius: 0 4px 4px 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .nextstep-list li::before { content: "→  "; font-weight: 800; color: var(--p6); }
+
+  /* ── SIGNAL LIST ── */
+  .signal-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .signal-list li {
+    padding: 7px 12px;
+    background: #FDF0D0;
+    border-left: 3px solid var(--or);
+    border-radius: 0 4px 4px 0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .signal-list li::before { content: "✦  "; color: var(--or); font-size: 10px; }
+
+  /* ── PROPOSITION BOX ── */
+  .prop-box {
+    background: var(--p6);
+    border-radius: 4px;
+    padding: 16px 20px;
+    color: white;
+    margin-bottom: 10px;
+  }
+  .prop-box .prop-label { font-size: 10px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; opacity: 0.75; margin-bottom: 6px; }
+  .prop-box p { font-size: 14px; font-style: italic; line-height: 1.65; }
+
+  /* ── DISCOVERY QUESTIONS ── */
+  .q-list { list-style: none; }
+  .q-list li {
+    padding: 9px 14px;
+    background: #EDF4FF;
+    border-left: 3px solid var(--p1);
+    margin-bottom: 5px;
+    border-radius: 0 4px 4px 0;
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--p1);
+  }
+
+  /* ── CONTEXT POINTS ── */
+  .ctx-list { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .ctx-list li {
+    padding: 8px 12px;
+    background: #F0FDF0;
+    border-left: 3px solid var(--p2);
+    border-radius: 0 4px 4px 0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* ── WARNING BOX ── */
+  .warn-box { background: #FDF5E6; border: 1px solid #EDD89A; border-left: 4px solid var(--p4); border-radius: 4px; padding: 12px 16px; margin-bottom: 10px; font-size: 12px; line-height: 1.6; }
+  .warn-box strong { color: var(--p4); }
+
+  /* ── RESISTANCE BLOCK ── */
+  .resist-block { background: #FEF0F0; border: 1px solid #F0C0C0; border-left: 4px solid var(--p5); border-radius: 4px; padding: 12px 16px; margin-bottom: 10px; }
+  .resist-block .resist-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--p5); margin-bottom: 6px; }
+  .resist-block p { font-size: 12px; line-height: 1.6; }
+  .resist-block .italic { font-style: italic; color: #444; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    .funnel-overview { display: none; }
+    .branch-grid { grid-template-columns: 1fr; }
+    .oui-grid { grid-template-columns: 1fr; }
+    .signal-list { grid-template-columns: 1fr; }
+    .ctx-list { grid-template-columns: 1fr; }
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="hdr-logo">VIVAGENCE</div>
+    <div class="hdr-sub">Schéma Funnel de Vente — Toutes phases · Tous secteurs · Tous scénarios</div>
+  </div>
+  <div class="hdr-badge">CONFIDENTIEL — USAGE INTERNE</div>
+</div>
+
+<!-- SECTOR BAR -->
+<div class="sector-bar">
+  <span class="lbl">Secteur :</span>
+  <button class="sec-btn active" onclick="setSector(0)">CHR</button>
+  <button class="sec-btn" onclick="setSector(1)">Grande Distrib.</button>
+  <button class="sec-btn" onclick="setSector(2)">Events</button>
+  <button class="sec-btn" onclick="setSector(3)">Franchises</button>
+  <button class="sec-btn" onclick="setSector(4)">Luxe & Retail</button>
+  <button class="sec-btn" onclick="setSector(5)">Food & Bev.</button>
+  <button class="sec-btn" onclick="setSector(6)">Banques</button>
+  <button class="sec-btn" onclick="setSector(7)">Industrie</button>
+  <button class="sec-btn" onclick="setSector(8)">Grands Comptes</button>
+  <button class="sec-btn" onclick="setSector(9)">PME/TPE</button>
+</div>
+
+<div class="main">
+
+  <!-- PHASE NAV -->
+  <div class="phase-nav">
+    <div id="nav-phases"></div>
+  </div>
+
+  <!-- FUNNEL OVERVIEW -->
+  <div class="funnel-overview">
+    <div class="funnel-overview-title">Funnel global</div>
+    <div class="f-level" onclick="setPhase(0)">
+      <div class="f-bar" style="background:#3D3D3D;width:100%"><span class="f-num">0</span><span class="f-lbl">PRÉSENTATION</span></div>
+    </div>
+    <div class="f-arrow">▼</div>
+    <div class="f-level" onclick="setPhase(1)">
+      <div class="f-bar" style="background:#1A3B6B;width:100%"><span class="f-num">1</span><span class="f-lbl">OBJET DU JOUR</span></div>
+    </div>
+    <div class="f-pct">100% des entretiens</div>
+    <div class="f-arrow">▼</div>
+    <div class="f-level" onclick="setPhase(2)">
+      <div class="f-bar" style="background:#2A6B3A;width:90%"><span class="f-num">2</span><span class="f-lbl">DÉCOUVERTE</span></div>
+    </div>
+    <div class="f-pct">90% — après cadrage</div>
+    <div class="f-arrow">▼</div>
+    <div class="f-level" onclick="setPhase(3)">
+      <div class="f-bar" style="background:#5B2D8E;width:78%"><span class="f-num">3</span><span class="f-lbl">REFORMULATION</span></div>
+    </div>
+    <div class="f-pct">78% — besoin qualifié</div>
+    <div class="f-arrow">▼</div>
+    <div class="f-level" onclick="setPhase(4)">
+      <div class="f-bar" style="background:#B05A00;width:65%"><span class="f-num">4</span><span class="f-lbl">ARGUMENTATION</span></div>
+    </div>
+    <div class="f-pct">65% — désir créé</div>
+    <div class="f-arrow">▼</div>
+    <div class="f-level" onclick="setPhase(5)">
+      <div class="f-bar" style="background:#8B1A1A;width:50%"><span class="f-num">5</span><span class="f-lbl">OBJECTIONS</span></div>
+    </div>
+    <div class="f-pct">50% — objections levées</div>
+    <div class="f-arrow">▼</div>
+    <div class="f-level" onclick="setPhase(6)">
+      <div class="f-bar" style="background:#0A6B5E;width:35%"><span class="f-num">6</span><span class="f-lbl">CONCLUSION</span></div>
+    </div>
+    <div class="f-pct">35% → closing</div>
+    <div class="conv-funnel">
+      <div class="conv-title">Taux cibles</div>
+      <div class="conv-item"><div class="conv-dot" style="background:#1A3B6B"></div><div class="conv-label">Lead → Qualifié</div><div class="conv-val" style="color:#1A3B6B">60%</div></div>
+      <div class="conv-item"><div class="conv-dot" style="background:#2A6B3A"></div><div class="conv-label">Qualifié → RDV</div><div class="conv-val" style="color:#2A6B3A">80%</div></div>
+      <div class="conv-item"><div class="conv-dot" style="background:#5B2D8E"></div><div class="conv-label">RDV → Devis</div><div class="conv-val" style="color:#5B2D8E">65%</div></div>
+      <div class="conv-item"><div class="conv-dot" style="background:#B05A00"></div><div class="conv-label">Devis → Closing</div><div class="conv-val" style="color:#B05A00">35%</div></div>
+      <div class="conv-item"><div class="conv-dot" style="background:#0A6B5E"></div><div class="conv-label">Client → Renouvt</div><div class="conv-val" style="color:#0A6B5E">70%</div></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content" id="content-area"></div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════════
+const PHASES = [
+  { id:0, num:"0", label:"Présentation",       color:"#3D3D3D", timing:"60–90 sec",   sub:"Créer le lien — se présenter — donner envie d'écouter" },
+  { id:1, num:"1", label:"Objet du jour",       color:"#1A3B6B", timing:"2–3 min",     sub:"Cadrer l'entretien — obtenir les 3 premiers oui" },
+  { id:2, num:"2", label:"Découverte",          color:"#2A6B3A", timing:"10–15 min",   sub:"Écouter — ne rien vendre — comprendre le vrai problème" },
+  { id:3, num:"3", label:"Reformulation",       color:"#5B2D8E", timing:"3–5 min",     sub:"Miroir — valider le besoin — obtenir le oui" },
+  { id:4, num:"4", label:"Argumentation CAP",   color:"#B05A00", timing:"10–15 min",   sub:"Caractéristique → Avantage → Preuve" },
+  { id:5, num:"5", label:"Objections CRAC",     color:"#8B1A1A", timing:"5–10 min",    sub:"Creuser → Reformuler → Argumenter → Contrôler" },
+  { id:6, num:"6", label:"Conclusion & Vente",  color:"#0A6B5E", timing:"3–5 min",     sub:"Verrouiller — Signer — Lancer la relation" },
+];
+
+// Sector data
+const SECTORS = [
+  // ─────────────────────────────────────────────────
+  // 0. CHR
+  // ─────────────────────────────────────────────────
+  {
+    name:"CHR — Cafés, Hôtels, Restaurants",
+    cible:"Directeur d'établissement, gérant, responsable marketing réseau CHR",
+    duree:"30 min",
+    color:"#D4460F",
+
+    p0:{
+      presVivaV:`"Bonjour [Prénom], je m'appelle [Prénom], je suis [responsable de secteur] chez Vivagence. Vivagence, c'est une agence de communication globale — on est à la fois agence, fabricant et imprimeur, tout en interne. Ce qui nous distingue : de la création jusqu'à l'installation physique chez vous, un seul interlocuteur, des délais jusqu'à J+1, et des coûts maîtrisés."`,
+      qInterlo:`"Et vous, en quelques mots — comment fonctionne aujourd'hui votre communication visuelle ?"`,
+      lienTerrain:`"Je pose cette question parce que les établissements CHR que je rencontre ont souvent le même défi : trop de prestataires, des délais qui ne correspondent pas aux rythmes de la restauration, et une cohérence visuelle difficile à maintenir. Je veux comprendre si c'est votre cas."`,
+      scenarios:[
+        {type:"yes", trigger:"Il répond et s'ouvre sur son organisation", action:"Prendre des notes visibles — montrer qu'on écoute. Rebondir sur un point précis mentionné.", next:"→ Phase 1 : Objet du jour"},
+        {type:"maybe", trigger:"Il est vague ou presse ('dites-moi ce que vous proposez')", action:"Ne pas céder. 'Je vous propose qu'on parte de votre situation pour que ce que je vous montre soit vraiment utile — 30 secondes ?' Reformuler la question.", next:"→ Relancer la question d'entrée"},
+        {type:"no", trigger:"Il refuse de répondre ou est très froid", action:"'Je comprends. Permettez-moi juste de vous expliquer en 60 secondes ce qui nous différencie, et si ça ne vous parle pas, on s'arrête là.' Version ultra-courte de la présentation.", next:"→ Version d'urgence : accroche + CTA direct"}
+      ]
+    },
+
+    p1:{
+      cadrage:`"Je vous propose qu'on travaille en 3 temps sur 25 minutes : je vous pose quelques questions sur votre organisation, vous me décrivez ce qui coince, et on voit ensemble si Vivagence peut vous apporter une vraie valeur. Si ce n'est pas le cas, je serai le premier à vous le dire. Ça vous convient ?"`,
+      accroche:`"Dans le CHR, l'image est votre premier service : un client juge votre établissement avant même de franchir la porte. Ma conviction, c'est que vous gérez aujourd'hui trop d'interlocuteurs pour un résultat qui n'est pas toujours à la hauteur de ce que vous offrez à table ou en chambre."`,
+      regle:`"Je vais vous poser des questions directes. Soyez aussi direct avec moi — on gagne tous les deux du temps."`,
+      oui1:"Accord sur les 25 minutes d'entretien",
+      oui2:"Accord pour répondre franchement aux questions",
+      oui3:"Accord pour une conclusion concrète à la fin",
+      resistance:`"Je comprends votre temps est compté. Je vous propose 15 minutes — si au bout de 10 vous voyez qu'il n'y a pas d'intérêt, on s'arrête. Ça marche ?"`,
+      scenarios:[
+        {type:"yes", trigger:"Il dit oui et semble engagé", action:"Confirmer l'agenda à voix haute : 'Parfait — questions sur votre organisation, vos douleurs, puis on conclut. C'est parti.'", next:"→ Phase 2 : Découverte"},
+        {type:"maybe", trigger:"Il accepte mais semble distrait ou pressé", action:"Réduire à 20 minutes. Aller plus vite en découverte — 3 questions clés au lieu de 5.", next:"→ Phase 2 découverte accélérée"},
+        {type:"no", trigger:"Il refuse le cadre ou veut qu'on aille directement à la présentation", action:"'D'accord — alors laissez-moi vous poser une seule question avant : quel est votre principal point de friction sur votre communication visuelle actuellement ?' Une question = mini-découverte.", next:"→ Mini-découverte 1 question → Phase 4 directe"}
+      ]
+    },
+
+    p2:{
+      contexte:["Le CHR renouvelle ses supports 2–3 fois/an (saisons, cartes, événements)","La plupart travaillent avec 3–5 fournisseurs distincts","La cohérence enseigne / carte / PLV de terrasse est rarement maîtrisée","Les urgences réouverture ou événement sont mal absorbées par les prestataires classiques"],
+      questions:["Comment gérez-vous aujourd'hui la création et l'impression de vos supports visuels ?","Quel est votre dernier projet qui s'est mal passé — délai, qualité, cohérence ?","Combien de temps passez-vous à coordonner vos prestataires visuels chaque mois ?","Quand vous avez une urgence — carte saisonnière, événement — comment ça se passe concrètement ?","Si vous pouviez changer une seule chose dans la gestion de votre image, ce serait quoi ?"],
+      signaux:["Cite un retard ou pose bâclée récente","Se plaint du nombre de contacts à gérer","Évoque un budget variable et mal maîtrisé","Mentionne des incohérences entre supports"],
+      scenarios:[
+        {type:"yes", trigger:"Il parle librement et identifie ses douleurs", action:"Creuser chaque douleur : 'Et ça, ça vous arrive combien de fois par an ?' / 'Qu'est-ce que ça vous coûte concrètement ?'. Prendre des notes.", next:"→ Phase 3 : Reformulation"},
+        {type:"maybe", trigger:"Il répond peu ou dit 'tout va bien'", action:"'Si je vous dis que nos clients CHR nous contactent souvent pour [problème X] — est-ce que ça vous parle ?' Proposer des scénarios concrets pour débloquer la parole.", next:"→ Continuer la découverte avec exemples concrets"},
+        {type:"no", trigger:"Il dit qu'il n'a aucun problème", action:"'C'est une bonne nouvelle. Dans ce cas, si vous pouviez améliorer une seule chose — même quelque chose de minime — ce serait quoi ?' Toujours trouver un point d'amélioration.", next:"→ Reformuler sur un bénéfice positif plutôt qu'une douleur"}
+      ]
+    },
+
+    p3:{
+      script:`"Si je résume ce que vous m'avez dit : vous gérez actuellement [X fournisseurs], vous avez eu des soucis de [délai / qualité / cohérence] sur votre dernière opération, et votre besoin principal c'est d'avoir quelqu'un qui gère tout sans que vous ayez à superviser chaque étape — avec des délais qui correspondent à vos rythmes d'exploitation. C'est bien ça ?"`,
+      besoinCache:"Le vrai besoin : tranquillité d'esprit et gain de temps. Vendez la sérénité, pas les bâches.",
+      scenarios:[
+        {type:"yes", trigger:"Il dit 'oui, exactement'", action:"'Parfait. C'est exactement ce que Vivagence résout — laissez-moi vous montrer comment.' Transition naturelle vers l'argumentation.", next:"→ Phase 4 : Argumentation CAP"},
+        {type:"maybe", trigger:"Il corrige ou nuance votre reformulation", action:"'Merci de la précision — c'est important. Donc si je reformule avec ça...' Recommencer la reformulation avec l'ajout. Ne jamais défendre votre première version.", next:"→ Re-reformulation → Phase 4"},
+        {type:"no", trigger:"Il dit que vous n'avez pas compris", action:"'Alors je dois mieux comprendre. Qu'est-ce que j'ai manqué ?' Retourner en découverte ciblée — 1 ou 2 questions complémentaires.", next:"→ Retour Phase 2 ciblé → Nouvelle reformulation"}
+      ]
+    },
+
+    p4:{
+      args:[
+        {carac:"Production 100% interne — création, impression, pose sous un même toit",av:"Un seul interlocuteur, une seule facture, zéro coordination de votre côté.",pr:"Nos clients CHR gagnent 4 à 6h/mois sur la gestion de leurs prestataires visuels.",bg:"#B05A00","bga":"#8A4500","bgp":"#5C3000"},
+        {carac:"Délais jusqu'à J+1 sur les supports standards (affiches, roll-up, bâches, menus)",av:"Réservation de groupe pour jeudi soir ? Menus spéciaux livrés mercredi.",pr:"99% de nos livraisons express CHR honorées dans le délai. Garanti contractuellement.",bg:"#B05A00","bga":"#8A4500","bgp":"#5C3000"},
+        {carac:"Équipes d'installation dédiées — Paris, Avignon, Valencia + réseau national",av:"Vos enseignes posées par nos équipes propres. Pas de sous-traitant inconnu.",pr:"Groupe hôtelier — 12 établissements relookés en 3 semaines, zéro retard de réouverture.",bg:"#B05A00","bga":"#8A4500","bgp":"#5C3000"}
+      ],
+      scenarios:[
+        {type:"yes", trigger:"Il hoche la tête, pose des questions sur les détails", action:"Continuer sur l'argument suivant. Pour chaque OUI partiel, noter mentalement que cet argument a fonctionné — il sera utile pour le closing.", next:"→ Phase 5 : Objections ou Phase 6 si aucune objection"},
+        {type:"maybe", trigger:"Il écoute mais ne réagit pas", action:"'Est-ce que ça correspond à ce que vous cherchez ?' Forcer une réaction après chaque CAP. Ne pas avancer sans signal.", next:"→ Revenir sur le lien besoin/argument : 'Vous m'avez dit que [douleur] — c'est exactement ce que ça résout'"},
+        {type:"no", trigger:"Il dit que c'est ce que font déjà ses fournisseurs", action:"'Vraiment ? Ils produisent ET installent ? Sur des délais J+1 ? Je serais curieux de savoir comment ils s'organisent.' Creuser le doute sans attaquer.", next:"→ Passer à la preuve différenciante : la comparaison chiffrée"}
+      ]
+    },
+
+    p5:{
+      objections:[
+        {obj:"On a déjà un imprimeur qui nous convient.",crac:"Creuser : 'Il vous livre en J+1, pose lui-même, et crée vos visuels ?' → Reformuler : 'Donc en réalité vous avez un imprimeur, mais pas de fabricant complet ?' → Arg : 'C'est là qu'on intervient différemment.' → Contrôler : 'Est-ce que ça répond à votre question ?'"},
+        {obj:"C'est trop cher pour un restaurant.",crac:"Creuser : 'Vous comparez à quoi exactement ?' → Reformuler : 'Donc c'est plutôt la valeur que vous questionnez ?' → Arg : 'Graphiste + imprimeur + poseur + votre temps = souvent 20-30% de plus. Je vous fais la comparaison chiffrée.' → Contrôler : 'Ça change votre perspective ?'"},
+        {obj:"On n'a pas le temps de changer de fournisseur.",crac:"Creuser : 'Qu'est-ce qui rend ce changement compliqué pour vous ?' → Reformuler : 'Vous avez peur du temps de transition ?' → Arg : 'On commence par un seul projet — votre prochaine carte saisonnière. Zéro engagement.' → Contrôler : 'C'est assez simple pour que vous testiez ?'"},
+        {obj:"On fait ça en interne avec Canva.",crac:"Creuser : 'Et pour l'impression et la pose, vous faites comment ?' → Reformuler : 'Donc la création est gérée, mais la production physique reste complexe ?' → Arg : 'On prend le relais à partir de vos fichiers Canva — on n'interfère pas avec ce qui marche.' → Contrôler : 'Ça résout votre problème de production ?'"}
+      ]
+    },
+
+    p6:{
+      signaux:["Il demande les délais pour sa prochaine carte saisonnière","Il demande un exemple de devis","Il pose des questions sur la logistique de pose","Il dit 'ça m'intéresse, mais je dois voir le prix'"],
+      technique:"Closing par l'étape suivante — projet pilote sans engagement",
+      script:`"Je vous propose de commencer par votre prochaine carte — budget limité, projet concret, vous testez notre process sans aucun engagement. Je vous envoie un devis sous 48h. On convient d'une date de retour en fin de semaine ?"`,
+      nextsteps:["Envoyer le devis sous 48h avec 2-3 options de budget","Joindre une étude de cas d'un CHR similaire","Planifier l'appel de retour à J+3","Proposer visite atelier si intérêt fort"],
+      prop:"Vivagence vous offre la cohérence visuelle d'une grande chaîne, la réactivité d'un artisan local, et la simplicité d'un seul interlocuteur — à un prix que vous maîtrisez.",
+      scenarios:[
+        {type:"yes", trigger:"Il accepte le next step et fixe une date", action:"Confirmer à voix haute et par écrit dans les 5 minutes. Email de confirmation avec le résumé de l'entretien + date convenue.", next:"→ CLOSING — Lancement du projet pilote"},
+        {type:"maybe", trigger:"Il dit 'oui mais je dois en parler à mon associé / mon chef'", action:"'Bien sûr. Je vous prépare un résumé d'une page pour lui — comme ça il a tous les éléments. Qui est la bonne personne à inclure dans le prochain échange ?' Identifier le vrai décideur.", next:"→ Qualifier le décideur → Proposer RDV à 3"},
+        {type:"no", trigger:"Il dit qu'il a besoin de temps / n'est pas prêt", action:"'Je comprends. Qu'est-ce qui vous freine encore — c'est le prix, le timing, ou autre chose ?' Identifier le vrai blocage. Proposer un engagement minimal : 'Et si on commençait juste par le devis — sans valider quoi que ce soit ?'", next:"→ Relancer avec proposition ultra-minimale"}
+      ]
+    }
+  },
+
+  // ─────────────────────────────────────────────────
+  // 1. GRANDE DISTRIBUTION
+  // ─────────────────────────────────────────────────
+  {
+    name:"Grande Distribution — GMS, Hypermarchés",
+    cible:"Directeur marketing, chef de produit, responsable trade marketing, directeur achats",
+    duree:"45 min",
+    color:"#1565C0",
+
+    p0:{
+      presVivaV:`"Bonjour [Prénom], je m'appelle [Prénom], je suis [responsable grands comptes] chez Vivagence. Vivagence, c'est l'agence qui produit et déploie simultanément sur des centaines de sites — agence, fabricant et imprimeur en un seul interlocuteur. Notre plateforme de pilotage gratuite vous donne une visibilité en temps réel sur chaque magasin."`,
+      qInterlo:`"Dans quel périmètre intervenez-vous sur les sujets de communication visuelle — trade marketing, achats, opérations ?"`,
+      lienTerrain:`"Je pose la question parce que selon les organisations, les décisions sont partagées entre plusieurs directions — et ça complexifie les déploiements. Je veux savoir où vous en êtes."`,
+      scenarios:[
+        {type:"yes", trigger:"Il définit son rôle précisément", action:"Adapter immédiatement le discours à son périmètre. Si trade marketing : parler déploiement et cohérence. Si achats : parler consolidation fournisseurs et ROI.", next:"→ Phase 1 : Objet du jour"},
+        {type:"maybe", trigger:"Il répond vaguement", action:"'Êtes-vous impliqué dans la validation finale des supports ou plutôt dans la coordination ?' Affiner le rôle réel.", next:"→ Qualifier le pouvoir de décision avant de continuer"},
+        {type:"no", trigger:"Il dit qu'il n'est pas la bonne personne", action:"'Qui dans votre organisation serait le plus pertinent pour ce sujet ? Et est-ce que je peux vous demander 5 minutes malgré tout — pour comprendre l'organisation avant de les appeler ?'", next:"→ Mapping de l'organisation → Identifier le bon interlocuteur"}
+      ]
+    },
+
+    p1:{
+      cadrage:`"Je vous propose 40 minutes en 3 temps : je comprends vos déploiements PLV actuels et ce qui coince, vous me posez des questions sur ce qu'on fait, et on voit si ça fait sens de travailler ensemble. Si je n'ai pas de valeur à vous apporter, je vous le dis directement. OK ?"`,
+      accroche:`"Quand vous déployez une opération nationale sur 80 magasins en 5 jours, le moindre retard coûte des ventes. Ce que j'observe chez vos confrères : la complexité de coordination entre fournisseurs crée des retards qui n'auraient pas dû exister."`,
+      regle:`"Parlez-moi de votre dernière opération — délais réels, incidents, coûts. Plus vous êtes précis, plus ma réponse sera pertinente. Accord ?"`,
+      oui1:"Accord sur les 40 min et les 3 temps",
+      oui2:"Accord pour partager les données réelles des opérations",
+      oui3:"Accord pour une proposition concrète en fin d'entretien",
+      resistance:`"En 20 minutes, je vous montre la plateforme et j'estime les économies sur votre prochaine opération. Ensuite vous décidez si ça vaut la peine de creuser. On fait ça ?"`,
+      scenarios:[
+        {type:"yes", trigger:"Il accepte et semble intéressé", action:"Lancer immédiatement avec la question clé : 'Sur votre dernière opération nationale, combien de sites n'étaient pas prêts à la date J ?'", next:"→ Phase 2 : Découverte"},
+        {type:"maybe", trigger:"Il accepte mais prévient qu'il est limité en temps", action:"Version accélérée : 2 questions de découverte au lieu de 5. Aller droit aux douleurs principales.", next:"→ Phase 2 accélérée : 2 questions clés seulement"},
+        {type:"no", trigger:"Il veut une présentation produit directe", action:"'D'accord. Mais pour que la présentation soit pertinente, une question : quel est le principal problème sur vos déploiements PLV actuels ?' Une question = maintenir la logique découverte.", next:"→ Mini-découverte 1 question → Phase 4 directe"}
+      ]
+    },
+
+    p2:{
+      contexte:["Les opérations promotionnelles GMS ont des fenêtres de 2–4 semaines non négociables","Le trade marketing gère 6–8 fournisseurs par opération","Les incohérences visuelles entre magasins sont fréquentes","Les directions n'ont aucune visibilité sur le taux de déploiement terrain"],
+      questions:["Sur votre dernière opération nationale, combien de sites n'étaient pas prêts à la date J ?","Combien de personnes en interne gèrent la coordination des prestataires visuels ?","Comment savez-vous que chaque magasin a bien posé ses supports — en temps réel ?","Avez-vous eu des remontées de directeurs de magasin sur des incohérences ou retards ?","Si vous aviez un seul tableau de bord pour toutes vos opérations PLV — qu'est-ce que ça changerait ?"],
+      signaux:["Cite un retard avec impact commercial mesurable","Parle de la difficulté à coordonner les fournisseurs","Évoque le manque de visibilité sur le terrain","Mentionne des coûts qui dépassent le budget initial"],
+      scenarios:[
+        {type:"yes", trigger:"Il donne des chiffres précis (X sites en retard, Y fournisseurs)", action:"Quantifier la douleur : 'Et X sites en retard, ça représente combien en chiffre d'affaires non généré ?' Rendre le problème financièrement visible.", next:"→ Phase 3 : Reformulation"},
+        {type:"maybe", trigger:"Il est vague ('ça se passe plutôt bien')", action:"Proposer des benchmarks : 'Vos confrères que je rencontre ont en moyenne 12% de sites non prêts à la date J — est-ce votre niveau aussi ?' Comparer pour débloquer.", next:"→ Continuer découverte avec données sectorielles"},
+        {type:"no", trigger:"Il dit qu'il n'a pas de problème sur ce sujet", action:"'Parfait. Alors ma question change : si vous pouviez améliorer quelque chose sur vos déploiements — vitesse, coût, visibilité — ce serait quoi ?' Reformuler en mode amélioration, pas en mode problème.", next:"→ Reformuler sur l'optimisation plutôt que la douleur"}
+      ]
+    },
+
+    p3:{
+      script:`"Donc si je résume : vous gérez [X] opérations par an avec [Y fournisseurs], vous avez eu [problème concret] sur la dernière campagne, et votre besoin prioritaire c'est d'avoir un partenaire qui garantit le déploiement simultané et vous donne une visibilité en temps réel — sans relancer chaque intervenant. C'est bien ça ?"`,
+      besoinCache:"Le vrai problème : perte de contrôle et responsabilité si l'opération rate. Vendez la maîtrise et la sécurité.",
+      scenarios:[
+        {type:"yes", trigger:"Il confirme la reformulation", action:"'C'est exactement ce que Vivagence résout. Laissez-moi vous montrer comment, concrètement.'", next:"→ Phase 4 : Argumentation CAP"},
+        {type:"maybe", trigger:"Il nuance ('oui mais notre vrai problème c'est plutôt...')", action:"'Merci — c'est important. Donc la priorité c'est plutôt [nouveau point] ?' Reformuler avec le nouveau centre de gravité.", next:"→ Reformulation ajustée → Phase 4 centrée sur la vraie priorité"},
+        {type:"no", trigger:"Il dit que vous n'avez pas compris le sujet", action:"'Alors je dois mieux comprendre. Pouvez-vous me donner un exemple concret de ce qui ne fonctionne pas ?' Retourner en découverte ciblée.", next:"→ Retour Phase 2 avec question très spécifique"}
+      ]
+    },
+
+    p4:{
+      args:[
+        {carac:"Plateforme de pilotage gratuite — suivi site par site en temps réel",av:"Vous savez à tout moment le taux de déploiement — sans relancer personne.",pr:"Nos clients GMS réduisent de 60% le temps passé à relancer les équipes terrain."},
+        {carac:"Production de masse interne — qualité homogène sur l'ensemble du réseau",av:"Tous les supports sortent du même atelier, même calibration couleur.",pr:"120 magasins équipés en 4 jours, 0 réclamation qualité couleur."},
+        {carac:"Un contrat, une facture mensuelle consolidée",av:"Votre service achats ne gère plus 8 fournisseurs. Vous négociez une fois.",pr:"Nos clients GD réduisent de 35% leur charge administrative achats com visuelle."}
+      ],
+      scenarios:[
+        {type:"yes", trigger:"Il demande à voir la plateforme en démo", action:"'Parfait — je vous montre ça en 10 minutes maintenant si vous avez l'écran.' Proposer la démo immédiate ou fixer un RDV démo dédié.", next:"→ Démo plateforme → Phase 6 si la démo convainc"},
+        {type:"maybe", trigger:"Il dit que ses fournisseurs font déjà ça", action:"'Est-ce qu'ils vous donnent un rapport hebdomadaire par magasin avec le taux de déploiement ?' Creuser le détail pour montrer la différence.", next:"→ Différenciation sur la spécificité de la plateforme"},
+        {type:"no", trigger:"Il dit que la plateforme n'est pas sa priorité", action:"'D'accord — qu'est-ce qui est votre priorité numéro 1 sur ce sujet ?' Revenir au besoin identifié en découverte et changer d'argument CAP.", next:"→ Adapter l'argumentation au besoin prioritaire identifié"}
+      ]
+    },
+
+    p5:{
+      objections:[
+        {obj:"On a des partenariats avec nos imprimeurs depuis des années.",crac:"Creuser : 'Ces partenariats couvrent aussi la coordination multi-sites et la pose ?' → Reformuler : 'Donc vous avez un imprimeur mais pas un déployeur complet ?' → Arg : 'Testez-nous sur une opération secondaire sans toucher à ces partenariats.' → Contrôler : 'C'est quelque chose que vous pourriez envisager ?'"},
+        {obj:"Votre plateforme prend du temps à mettre en place.",crac:"Creuser : 'Vous avez eu des expériences de mise en place compliquées avec d'autres outils ?' → Reformuler : 'Vous avez peur que ça mobilise vos équipes IT ?' → Arg : 'Notre équipe fait le setup en 2 jours — zéro charge IT de votre côté.' → Contrôler : 'Est-ce que ça répond à votre crainte ?'"},
+        {obj:"On a déjà un outil de suivi interne.",crac:"Creuser : 'Il vous donne une visibilité en temps réel sur chaque magasin ?' → Reformuler : 'Donc vous avez un outil de reporting mais pas de suivi temps réel terrain ?' → Arg : 'Notre plateforme s'intègre en API — elle complète votre outil sans le remplacer.' → Contrôler : 'C'est une intégration que vous pourriez tester ?'"},
+        {obj:"Le budget est bouclé pour cette année.",crac:"Creuser : 'Votre budget com visuelle est figé jusqu'à quand ?' → Reformuler : 'Donc l'enjeu c'est de préparer N+1 dès maintenant ?' → Arg : 'Je vous propose un chiffrage pour vos opérations de l'année prochaine — vous avez les éléments pour budgétiser en septembre.' → Contrôler : 'Ça vous serait utile pour votre prochain budget ?'"}
+      ]
+    },
+
+    p6:{
+      signaux:["Il demande à voir la démo plateforme en détail","Il évoque une prochaine opération avec une date précise","Il demande les tarifs pour un volume annuel","Il veut faire valider à sa direction achats"],
+      technique:"Closing par l'urgence calendaire — ancrer sur la prochaine opération",
+      script:`"Vous m'avez dit que votre prochaine opération nationale est le [date]. Pour être opérationnel à temps, le paramétrage doit être lancé avant fin [mois-1]. Est-ce qu'on planifie une réunion technique la semaine prochaine ?"`,
+      nextsteps:["Envoyer la proposition pilote sur la prochaine opération sous 48h","Planifier la démo plateforme avec les équipes techniques","Préparer un ROI comparatif sur leur dernière campagne","Impliquer un directeur Vivagence pour le RDV de validation direction"],
+      prop:"Vivagence est le seul partenaire qui vous donne production nationale, pose coordonnée et visibilité temps réel en une seule relation contractuelle.",
+      scenarios:[
+        {type:"yes", trigger:"Il accepte la réunion technique", action:"Confirmer immédiatement par email avec les personnes à inviter côté client. Préparer la démo avec les données de leur secteur.", next:"→ CLOSING — Paramétrage plateforme lancé"},
+        {type:"maybe", trigger:"Il dit 'je dois en parler à mes achats'", action:"'Bien sûr. Puis-je vous donner un résumé chiffré à leur soumettre ? Et est-ce que je peux les appeler directement pour gagner du temps ?' Obtenir le contact des achats.", next:"→ Qualifier les achats → RDV à 3 avec achats + trade marketing"},
+        {type:"no", trigger:"Il dit qu'il a besoin de voir d'autres offres", action:"'Je comprends. Pour que la comparaison soit équitable, voici les 3 points sur lesquels me challenger : délai de déploiement, coût consolidé, et plateforme de suivi. Demandez ces 3 éléments à vos autres prestataires.' Cadrer la comparaison en votre faveur.", next:"→ Fournir un guide de comparaison → Suivre à J+7"}
+      ]
+    }
+  },
+
+  // ─── Sectors 3-9 : structure identique, data condensée ───────────────
+  {
+    name:"Agences Événementielles",
+    cible:"Directeur de production, chef de projet événementiel, directeur artistique",
+    duree:"30 min",
+    color:"#6A1B9A",
+    p0:{
+      presVivaV:`"Bonjour [Prénom], je m'appelle [Prénom] chez Vivagence. On est fabricant de supports de communication — tout en interne. Pour les agences events, on produit 7j/7 et on a un programme partenaire qui vous permet de marginer sur nos productions."`,
+      qInterlo:`"Comment fonctionnez-vous pour la production de vos supports physiques — vous avez vos prestataires en place ?"`,
+      lienTerrain:`"Je pose la question parce que la plupart des agences events ont des fournisseurs qui marchent bien en conditions normales, mais craquent sur les urgences du vendredi soir."`,
+      scenarios:[{type:"yes",trigger:"Il s'ouvre sur ses problèmes de production",action:"Creuser immédiatement : 'C'est arrivé combien de fois l'an dernier ?'",next:"→ Phase 1"},{type:"maybe",trigger:"Il est méfiant",action:"'Pas de pitch — juste une question : sur votre dernier événement urgent, comment ça s'est passé avec votre fournisseur ?'",next:"→ Question d'entrée sur un cas concret"},{type:"no",trigger:"Il dit qu'il est satisfait",action:"'Je comprends. Puis-je vous envoyer le dossier partenaire ? Si vous avez une urgence, vous aurez un back-up solide.'",next:"→ Email dossier partenaire → Relance à J+30"}]
+    },
+    p1:{
+      cadrage:`"25 minutes en 3 temps : vos douleurs de production, ce qu'on fait, et si ça fait sens ensemble. Si ce n'est pas le bon fit, je vous le dis franchement."`,
+      accroche:`"Dans l'événementiel, une date est absolue. Ma question : qu'est-ce que vous faites quand un fournisseur vous plante à J-2 ?"`,
+      regle:`"Parlez-moi de vos vrais problèmes de production — je ne suis pas là pour vendre une solution miracle."`,
+      oui1:"Accord sur 25 min d'entretien ciblé",
+      oui2:"Accord pour décrire des situations réelles",
+      oui3:"Accord pour évaluer si un partenariat a du sens",
+      resistance:`"Je vous envoie le dossier partenaire par email. Si une urgence arrive, vous avez un back-up."`,
+      scenarios:[{type:"yes",trigger:"Il accepte",action:"'Quelle est la dernière fois qu'un fournisseur vous a planté à la dernière minute ?' Question directe.",next:"→ Phase 2"},{type:"maybe",trigger:"Il est pressé",action:"Version 15 min. 1 question clé + démo partenaire.",next:"→ Découverte accélérée"},{type:"no",trigger:"Refuse",action:"Email dossier partenaire + relance J+14.",next:"→ Nurturing email"}]
+    },
+    p2:{
+      contexte:["Briefs validés la veille pour le lendemain","Qualité sous-traitants aléatoire","Agences souvent sans marge sur la production physique","Installation mal coordonnée"],
+      questions:["Sur vos 3 derniers événements, combien de fois un fournisseur vous a fait défaut ?","Est-ce que vous marger sur la production de vos supports physiques ?","Comment gérez-vous un brief du vendredi soir pour lundi matin ?","Avez-vous un fabricant qui connaît vraiment les contraintes événementielles ?","Quel est le support qui vous cause le plus de problèmes ?"],
+      signaux:["Fournisseur qui a planté sur un événement important","Marges absentes sur la production","Urgences mal gérées","Cherche un partenaire fiable long terme"],
+      scenarios:[{type:"yes",trigger:"Il liste ses problèmes",action:"Quantifier : 'Et ça représente combien de CA perdu ou de stress par an ?'",next:"→ Phase 3"},{type:"maybe",trigger:"Dit 'ça se passe bien'",action:"'Si votre fournisseur habituel est indisponible sur votre prochain événement — vous faites comment ?' Scénario hypothétique.",next:"→ Continuer avec scénario risque"},{type:"no",trigger:"Dit qu'il a tout en ordre",action:"'Et la marge sur la production ? C'est un sujet pour vous ?' Changer d'angle.",next:"→ Pivot sur l'angle marge / rentabilité"}]
+    },
+    p3:{
+      script:`"Ce que vous me dites : vous avez besoin d'un fabricant qui tient les délais impossibles, qui installe lui-même, et qui vous permet de dégager une marge sur la production. Et quelqu'un qui sait ce qu'est un J-1 sans paniquer. C'est ça ?"`,
+      besoinCache:"Deux besoins : fiabilité opérationnelle + rentabilité. Adressez les deux.",
+      scenarios:[{type:"yes",trigger:"Confirme",action:"Transition naturelle vers le programme partenaire.",next:"→ Phase 4"},{type:"maybe",trigger:"Nuance",action:"Reformuler avec le nouveau point.",next:"→ Reformulation ajustée → Phase 4"},{type:"no",trigger:"N'a pas compris",action:"'Donnez-moi un exemple concret de ce qui ne marche pas.' Retour découverte.",next:"→ Retour Phase 2"}]
+    },
+    p4:{
+      args:[
+        {carac:"Production 7j/7 — gestion native des urgences",av:"Brief vendredi soir → production samedi → livraison dimanche.",pr:"100% des livraisons événementielles urgentes honorées en 2024."},
+        {carac:"Programme partenaire revendeur — marge garantie",av:"Vous facturez votre client avec votre marge. Vivagence facture à prix partenaire.",pr:"12 à 18% de marge nette en moyenne pour nos agences partenaires."},
+        {carac:"Installation intégrée — Paris, Avignon, Valencia + national",av:"Vivagence produit ET installe. Un seul numéro.",pr:"40 événements/an pour une agence partenaire — 0 no-show installation sur 3 ans."}
+      ],
+      scenarios:[{type:"yes",trigger:"Demande la grille tarifaire partenaire",action:"Sortir la grille immédiatement. Proposer de signer le programme aujourd'hui.",next:"→ Phase 6 : Closing partenariat"},{type:"maybe",trigger:"Hésite sur le programme partenaire",action:"'Pas d'exclusivité, pas de minimum. Vous commandez quand vous voulez.' Lever la peur d'engagement.",next:"→ Lever l'objection exclusivité → Phase 6"},{type:"no",trigger:"Dit qu'il a déjà ce qu'il faut",action:"'Sur les urgences qui arrivent en dehors de vos horaires habituels — vous avez un back-up ?' Angle de la sécurité.",next:"→ Angle back-up et sécurité"}]
+    },
+    p5:{
+      objections:[
+        {obj:"On a notre propre réseau de fournisseurs rodé.",crac:"Creuser : 'Et sur les urgences hors horaires ?' → Reformuler : 'Donc votre réseau est solide en conditions normales, mais risqué sur les urgences extrêmes ?' → Arg : 'Vivagence vient en back-up sur ces cas.' → Contrôler : 'C'est utile comme filet de sécurité ?'"},
+        {obj:"Le programme partenaire oblige à exclusivité ?",crac:"Creuser : 'C'est ce qui vous freine ?' → Reformuler : 'Vous voulez garder votre liberté de choix ?' → Arg : 'Zéro exclusivité, zéro minimum. Vous commandez si et quand vous voulez.' → Contrôler : 'Ça enlève votre crainte ?'"},
+        {obj:"Vos délais J+1, c'est du marketing.",crac:"Creuser : 'C'est une crainte ou une expérience avec un autre fournisseur ?' → Reformuler : 'Vous avez déjà été déçu par des promesses de délais ?' → Arg : 'Donnez-moi un brief fictif. Je vous donne le délai exact en 2h.' → Contrôler : 'On teste sur un cas réel ?'"},
+        {obj:"Notre client a une charte stricte.",crac:"Creuser : 'Vous avez déjà eu des problèmes de non-respect de charte ?' → Reformuler : 'La conformité charte, c'est votre vraie contrainte ?' → Arg : 'Envoyez-nous la charte — on l'intègre avant production. 0 écart.' → Contrôler : 'Si on garantit la conformité, c'est réglé ?'"}
+      ]
+    },
+    p6:{
+      signaux:["Demande la grille tarifaire partenaire","Évoque un événement à venir","Demande 'comment on s'inscrit dans le programme ?'","Parle de 'tester sur un projet'"],
+      technique:"Closing par intégration immédiate — signature programme partenaire",
+      script:`"Je vous propose de signer le programme partenaire aujourd'hui — 5 minutes, sans engagement de volume — et de tester sur votre prochain événement. Vous avez accès aux tarifs partenaires dès demain."`,
+      nextsteps:["Envoyer le dossier partenaire dans les 2h","Planifier call créa pour première commande","Proposer mise en relation avec agence partenaire existante","Intégrer comme 'partenaire stratégique' dans le CRM"],
+      prop:"Vivagence est votre back-office production : invisible pour votre client, irremplaçable pour vous.",
+      scenarios:[{type:"yes",trigger:"Signe le programme",action:"Email de confirmation immédiat + présentation de l'équipe créa dédiée.",next:"→ CLOSING — Programme partenaire activé"},{type:"maybe",trigger:"Veut réfléchir",action:"'Qu'est-ce qui vous retient encore ?' Identifier le dernier blocage.",next:"→ Lever le dernier blocage → Re-proposer"},{type:"no",trigger:"Pas prêt",action:"'Je vous envoie le dossier. Et si une urgence arrive dans les 30 jours, appelez-moi directement — je gère.'",next:"→ Nurturing + disponibilité urgences → Relance J+30"}]
+    }
+  },
+
+  // Sectors 4–9 : version ultra-condensée pour les autres
+  ...["Réseaux & Franchises","Luxe & Retail Haut de Gamme","Food & Beverage","Banques, Assurances & Mutuelles","Usine, Factory & Industrie","Grands Comptes — ETI, CAC40","PME & TPE"].map((name,i)=>{
+    const colors=["#2E7D32","#880E4F","#E65100","#1A237E","#37474F","#0D47A1","#4E342E"];
+    const cibles=["Directeur développement réseau, DM franchise","Directeur retail, VM, responsable marketing","Chef de produit, DM, responsable trade marketing","Directeur immobilier, DM réseau","Directeur de site, responsable HSE","Directeur marketing groupe, directeur achats","Le dirigeant lui-même (décideur = acheteur)"];
+    const durees=["45 min","45–60 min","30–40 min","45 min","30–40 min","60 min","20–30 min"];
+    return {
+      name, cible:cibles[i], duree:durees[i], color:colors[i],
+      p0:{presVivaV:`"Bonjour [Prénom], je m'appelle [Prénom] chez Vivagence. Vivagence est une agence de communication globale — fabricant, créateur et imprimeur en un seul interlocuteur. [Adapter avec le point différenciant clé pour ce secteur.]"`,qInterlo:`"Pouvez-vous me dire en quelques mots comment est organisée votre communication visuelle aujourd'hui ?"`,lienTerrain:`"Je pose cette question parce que [problème spécifique au secteur]. Je veux comprendre si c'est votre cas."`,scenarios:[{type:"yes",trigger:"Il s'ouvre",action:"Rebondir sur un point précis. Prise de notes visible.",next:"→ Phase 1"},{type:"maybe",trigger:"Vague",action:"Reformuler la question avec un exemple concret du secteur.",next:"→ Relancer la question"},{type:"no",trigger:"Froid",action:"Version ultra-courte 60 sec + CTA email.",next:"→ Email + relance J+7"}]},
+      p1:{cadrage:`"Je vous propose [durée] en 3 temps : je comprends votre situation, vous me dites ce qui coince, on voit si Vivagence peut apporter une vraie valeur. Si non, je vous le dis. Accord ?"`,accroche:`"[Accroche sectorielle spécifique — cf. guide commercial]"`,regle:`"Parlez-moi de vos vrais défis — pas de l'image idéale. Je travaille mieux avec des exemples réels."`,oui1:"Accord sur la durée et les 3 temps",oui2:"Accord pour répondre franchement",oui3:"Accord pour conclure avec une proposition",resistance:`"[Réduire à 20 min] — une question clé et démo si possible."`,scenarios:[{type:"yes",trigger:"Accepte",action:"Lancer la découverte immédiatement.",next:"→ Phase 2"},{type:"maybe",trigger:"Pressé",action:"Réduire et accélérer.",next:"→ Découverte accélérée"},{type:"no",trigger:"Refuse le cadre",action:"1 question mini-découverte + Phase 4 directe.",next:"→ Phase 4 directe"}]},
+      p2:{contexte:["[Contexte sectoriel 1]","[Contexte sectoriel 2]","[Contexte sectoriel 3]","[Contexte sectoriel 4]"],questions:["[Question ouverte 1]","[Question ouverte 2]","[Question ouverte 3]","[Cf. fiche sectorielle Word pour les 5 questions complètes]"],signaux:["[Signal d'achat 1]","[Signal d'achat 2]","[Cf. guide commercial pour la liste complète]",""],scenarios:[{type:"yes",trigger:"Donne des infos",action:"Creuser et quantifier.",next:"→ Phase 3"},{type:"maybe",trigger:"Vague",action:"Proposer des scénarios concrets du secteur.",next:"→ Continuer découverte"},{type:"no",trigger:"Pas de problème",action:"Pivot sur l'amélioration et la performance.",next:"→ Angle positif"}]},
+      p3:{script:`"Si je résume ce que vous m'avez dit : [reformulation adaptée au besoin découvert]. C'est bien ça ?"`,besoinCache:"[Cf. guide commercial — besoin caché spécifique au secteur]",scenarios:[{type:"yes",trigger:"Confirme",action:"Transition vers argumentation.",next:"→ Phase 4"},{type:"maybe",trigger:"Nuance",action:"Reformuler avec le nouveau point.",next:"→ Reformulation ajustée"},{type:"no",trigger:"N'a pas compris",action:"Retour découverte ciblée.",next:"→ Retour Phase 2"}]},
+      p4:{args:[{carac:"[Argument CAP 1 — cf. guide commercial]",av:"[Avantage lié au besoin découvert]",pr:"[Preuve chiffrée ou référence client]"},{carac:"[Argument CAP 2]",av:"[Avantage]",pr:"[Preuve]"},{carac:"[Argument CAP 3]",av:"[Avantage]",pr:"[Preuve]"}],scenarios:[{type:"yes",trigger:"Intérêt visible",action:"Continuer et renforcer.",next:"→ Phase 5 ou 6"},{type:"maybe",trigger:"Neutre",action:"'Est-ce que ça correspond à ce que vous cherchez ?' Forcer une réaction.",next:"→ Relancer le lien besoin/argument"},{type:"no",trigger:"Dit que son fournisseur fait ça",action:"Creuser le détail pour montrer la différence.",next:"→ Différenciation sur la preuve"}]},
+      p5:{objections:[{obj:"[Objection principale secteur]",crac:"Creuser → Reformuler → Argumenter → Contrôler. Cf. guide commercial pour les 4 objections complètes."},{obj:"[Objection budget]",crac:"Quantifier la douleur → Proposer le pilote → Lever le risque."},{obj:"[Objection fournisseur actuel]",crac:"Ne pas attaquer → Proposer le test en parallèle → Comparer objectivement."},{obj:"[Objection timing]",crac:"Identifier le vrai blocage → Proposer une entrée minimale sans engagement."}]},
+      p6:{signaux:["[Signal d'achat 1]","[Signal d'achat 2]","[Signal d'achat 3]","[Cf. guide commercial]"],technique:"Closing par l'étape suivante — next step concret et daté",script:`"[Script de closing adapté au secteur — cf. guide commercial]"`,nextsteps:["[Next step 1]","[Next step 2]","[Cf. guide commercial pour la liste complète]"],prop:"[Proposition de valeur finale — cf. guide commercial sectoriel]",scenarios:[{type:"yes",trigger:"Accepte le next step",action:"Confirmer par écrit dans les 5 minutes.",next:"→ CLOSING"},{type:"maybe",trigger:"Doit en parler en interne",action:"'Je prépare un résumé pour votre interlocuteur. Qui dois-je inclure ?'",next:"→ Qualifier le décideur → RDV à 3"},{type:"no",trigger:"Pas prêt",action:"'Qu'est-ce qui vous freine encore ?' Identifier le dernier blocage.",next:"→ Lever le blocage → Engagement minimal"}]}
+    };
+  })
+];
+
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+let currentSector = 0;
+let currentPhase = 0;
+
+// ══════════════════════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════════════════════
+function setSector(idx) {
+  currentSector = idx;
+  document.querySelectorAll('.sec-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  renderAll();
+}
+
+function setPhase(idx) {
+  currentPhase = idx;
+  document.querySelectorAll('.phase-nav-item').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.phase-content').forEach((c,i)=>c.classList.toggle('active',i===idx));
+  document.getElementById('content-area').scrollTo({top:0,behavior:'smooth'});
+}
+
+function branchClass(t) {
+  return t==='yes'?'#0A5C2A':'yes'?'#0A5C2A':t==='no'?'#7B1515':t==='maybe'?'#8A4500':'#555';
+}
+function branchBg(t) {
+  return t==='yes'?'#EAF9F0':t==='no'?'#FDF0F0':'#FDF5E0';
+}
+function branchBorder(t) {
+  return t==='yes'?'#2A6B3A':t==='no'?'#8B1A1A':'#B05A00';
+}
+function branchLabel(t) {
+  return t==='yes'?'✓ OUI':t==='no'?'✗ NON':'? HÉSITATION';
+}
+function branchLabelColor(t){
+  return t==='yes'?'#2A6B3A':t==='no'?'#8B1A1A':'#B05A00';
+}
+
+function scenariosHTML(scenarios) {
+  if(!scenarios||!scenarios.length) return '';
+  return `
+    <div class="block">
+      <div class="block-title">Scénarios de suite selon la réponse</div>
+      <div class="branch-grid">
+        ${scenarios.map(s=>`
+          <div class="branch" style="background:${branchBg(s.type)};border-color:${branchBorder(s.type)}">
+            <div class="b-tag" style="color:${branchLabelColor(s.type)}">${branchLabel(s.type)}</div>
+            <div class="b-trigger">"${s.trigger}"</div>
+            <div class="b-action">${s.action}</div>
+            <div class="b-next" style="background:${branchBorder(s.type)};color:white">${s.next}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+}
+
+function renderNav() {
+  const nav = document.getElementById('nav-phases');
+  nav.innerHTML = PHASES.map((ph,i)=>`
+    <div class="phase-nav-item ${i===currentPhase?'active':''}" onclick="setPhase(${i})">
+      <div class="phase-dot" style="background:${ph.color}">${ph.num}</div>
+      <div class="phase-nav-label">${ph.label}</div>
+    </div>
+    ${i<PHASES.length-1?'<div class="phase-connector"></div>':''}
+  `).join('');
+}
+
+function renderContent() {
+  const s = SECTORS[currentSector];
+  const ca = document.getElementById('content-area');
+
+  const phaseHTML = (ph, data, contentHTML) => `
+    <div class="phase-content ${ph.id===currentPhase?'active':''}" id="ph-${ph.id}">
+      <div class="ph-header">
+        <div class="ph-num" style="background:${ph.color}">${ph.num}</div>
+        <div>
+          <div class="ph-title">${ph.label}</div>
+          <div class="ph-sub">${ph.sub}</div>
+        </div>
+        <div class="ph-timing" style="background:${ph.color}22;color:${ph.color};border:1.5px solid ${ph.color}44">${ph.timing}</div>
+      </div>
+      ${contentHTML}
+    </div>`;
+
+  // PHASE 0
+  const ph0 = s.p0;
+  const c0 = `
+    <div class="block">
+      <div class="block-title">Présentation Vivagence</div>
+      <div class="script-box" style="background:#F0F0F0;border-left-color:#3D3D3D">
+        <div class="label" style="color:#3D3D3D">Mot-à-mot (à adapter)</div>
+        <div class="quote-mark" style="color:#3D3D3D">❝</div>
+        <p>${ph0.presVivaV}</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Question d'entrée — laisser l'interlocuteur se présenter</div>
+      <div class="script-box" style="background:#FDF8ED;border-left-color:#C8973A">
+        <div class="label" style="color:#C8973A">Question ouverte</div>
+        <div class="quote-mark" style="color:#C8973A">❝</div>
+        <p>${ph0.qInterlo}</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Lien terrain — contextualiser votre démarche</div>
+      <div class="warn-box">${ph0.lienTerrain}</div>
+    </div>
+    ${scenariosHTML(ph0.scenarios)}`;
+
+  // PHASE 1
+  const ph1 = s.p1;
+  const c1 = `
+    <div class="block">
+      <div class="block-title">Cadrage agenda</div>
+      <div class="script-box" style="background:#EBF1FB;border-left-color:#1A3B6B">
+        <div class="label" style="color:#1A3B6B">Proposition d'agenda — mot-à-mot</div>
+        <div class="quote-mark" style="color:#1A3B6B">❝</div>
+        <p>${ph1.cadrage}</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Accroche sectorielle</div>
+      <div class="script-box" style="background:#F9F0DC;border-left-color:#C8973A">
+        <div class="label" style="color:#C8973A">Phrase de contexte métier</div>
+        <div class="quote-mark" style="color:#C8973A">❝</div>
+        <p>${ph1.accroche}</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Règle du jeu</div>
+      <div class="script-box" style="background:#F0F0F0;border-left-color:#555">
+        <div class="label" style="color:#555">À annoncer systématiquement</div>
+        <p>${ph1.regle}</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Les 3 oui — à obtenir avant de continuer</div>
+      <div class="oui-grid">
+        <div class="oui-card" style="background:#1A3B6B;color:white"><div class="oui-n">OUI N°1</div><div class="oui-t">${ph1.oui1}</div></div>
+        <div class="oui-card" style="background:#244E8A;color:white"><div class="oui-n">OUI N°2</div><div class="oui-t">${ph1.oui2}</div></div>
+        <div class="oui-card" style="background:#2E6099;color:white"><div class="oui-n">OUI N°3</div><div class="oui-t">${ph1.oui3}</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Si l'interlocuteur résiste au cadrage</div>
+      <div class="resist-block">
+        <div class="resist-label">Signe : il est pressé, méfiant ou n'a pas choisi d'être là</div>
+        <p class="italic">${ph1.resistance}</p>
+      </div>
+    </div>
+    ${scenariosHTML(ph1.scenarios)}`;
+
+  // PHASE 2
+  const ph2 = s.p2;
+  const c2 = `
+    <div class="block">
+      <div class="block-title">Contexte terrain — ce que vous savez avant d'arriver</div>
+      <ul class="ctx-list">${ph2.contexte.map(c=>`<li>${c}</li>`).join('')}</ul>
+    </div>
+    <div class="block">
+      <div class="block-title">Questions ouvertes — dans cet ordre</div>
+      <ul class="q-list">${ph2.questions.map((q,i)=>`<li><strong>${i+1}.</strong> ${q}</li>`).join('')}</ul>
+    </div>
+    <div class="block">
+      <div class="block-title">Signaux d'achat — noter si l'un de ces éléments apparaît</div>
+      <ul class="signal-list">${ph2.signaux.map(s=>`<li>${s}</li>`).join('')}</ul>
+    </div>
+    ${scenariosHTML(ph2.scenarios)}`;
+
+  // PHASE 3
+  const ph3 = s.p3;
+  const c3 = `
+    <div class="block">
+      <div class="block-title">Script de reformulation — mot-à-mot</div>
+      <div class="script-box" style="background:#EAD9FF;border-left-color:#5B2D8E">
+        <div class="label" style="color:#5B2D8E">Commencer par : "Si je résume ce que vous m'avez dit..."</div>
+        <div class="quote-mark" style="color:#5B2D8E">❝</div>
+        <p>${ph3.script}</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Question de validation — attendre le OUI explicite</div>
+      <div class="script-box" style="background:#F8F4FF;border-left-color:#9B6DD4">
+        <p>"Est-ce que j'ai bien compris votre situation ?"</p>
+        <p style="margin-top:8px;font-size:12px;color:#666;font-style:normal">→ Attendre le OUI avant de continuer. Si le prospect corrige, noter et reformuler de nouveau.</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Besoin caché — ne jamais vendre contre ce besoin</div>
+      <div class="warn-box"><strong>À intérioriser :</strong> ${ph3.besoinCache}</div>
+    </div>
+    ${scenariosHTML(ph3.scenarios)}`;
+
+  // PHASE 4
+  const ph4 = s.p4;
+  const c4 = `
+    <div class="block">
+      <div class="block-title">Méthode CAP — 3 arguments à déployer dans l'ordre</div>
+      ${ph4.args.map((a,i)=>`
+        <div class="cap-block">
+          <div class="cap-row"><div class="cap-label" style="background:#B05A00">CARAC. ${i+1}</div><div class="cap-val" style="font-weight:700;color:#B05A00">${a.carac}</div></div>
+          <div class="cap-row"><div class="cap-label" style="background:#8A4500">AVANTAGE</div><div class="cap-val">${a.av}</div></div>
+          <div class="cap-row"><div class="cap-label" style="background:#5C3000">PREUVE</div><div class="cap-val" style="font-style:italic;color:#555">${a.pr}</div></div>
+        </div>`).join('')}
+    </div>
+    ${scenariosHTML(ph4.scenarios)}`;
+
+  // PHASE 5
+  const ph5 = s.p5;
+  const c5 = `
+    <div class="block">
+      <div class="block-title">Méthode CRAC — Creuser · Reformuler · Argumenter · Contrôler</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
+        <span class="crac-step" style="background:#1A3B6B">C — Creuser</span>
+        <span class="crac-step" style="background:#5B2D8E">R — Reformuler</span>
+        <span class="crac-step" style="background:#B05A00">A — Argumenter</span>
+        <span class="crac-step" style="background:#0A6B5E">C — Contrôler</span>
+      </div>
+      <table class="obj-table">
+        <thead style="background:#8B1A1A"><tr><th style="width:38%">Objection prospect</th><th>Réponse CRAC</th></tr></thead>
+        <tbody>
+          ${ph5.objections.map(o=>`
+            <tr>
+              <td class="obj-trigger">"${o.obj}"</td>
+              <td>${o.crac}</td>
+            </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>`;
+
+  // PHASE 6
+  const ph6 = s.p6;
+  const c6 = `
+    <div class="block">
+      <div class="block-title">Signaux d'achat — si l'un apparaît, lancer le closing</div>
+      <ul class="signal-list">${ph6.signaux.map(s=>`<li>${s}</li>`).join('')}</ul>
+    </div>
+    <div class="block">
+      <div class="block-title">Technique de closing</div>
+      <div class="card" style="border-left:4px solid #0A6B5E">
+        <div class="card-label" style="color:#0A6B5E">${ph6.technique}</div>
+      </div>
+      <div class="script-box" style="background:#CFFAF0;border-left-color:#0A6B5E">
+        <div class="label" style="color:#0A6B5E">Script mot-à-mot</div>
+        <div class="quote-mark" style="color:#0A6B5E">❝</div>
+        <p>${ph6.script}</p>
+      </div>
+    </div>
+    <div class="block">
+      <div class="block-title">Next steps à confirmer avant de quitter l'entretien</div>
+      <ul class="nextstep-list">${ph6.nextsteps.map(n=>`<li>${n}</li>`).join('')}</ul>
+    </div>
+    <div class="prop-box">
+      <div class="prop-label">Proposition de valeur finale</div>
+      <p>${ph6.prop}</p>
+    </div>
+    ${scenariosHTML(ph6.scenarios)}`;
+
+  ca.innerHTML = [
+    phaseHTML(PHASES[0], ph0, c0),
+    phaseHTML(PHASES[1], ph1, c1),
+    phaseHTML(PHASES[2], ph2, c2),
+    phaseHTML(PHASES[3], ph3, c3),
+    phaseHTML(PHASES[4], ph4, c4),
+    phaseHTML(PHASES[5], ph5, c5),
+    phaseHTML(PHASES[6], ph6, c6),
+  ].join('');
+}
+
+function renderAll() {
+  renderNav();
+  renderContent();
+  // re-attach nav clicks
+  document.querySelectorAll('.phase-nav-item').forEach((el,i)=>{
+    el.onclick = ()=>setPhase(i);
+  });
+  setPhase(currentPhase);
+}
+
+renderAll();
+</script>
+</body>
+</html>
